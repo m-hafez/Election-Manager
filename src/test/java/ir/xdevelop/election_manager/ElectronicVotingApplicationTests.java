@@ -1,4 +1,4 @@
-package ir.xdevelop.electronic_voting;
+package ir.xdevelop.election_manager;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

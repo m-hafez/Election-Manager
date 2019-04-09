@@ -1,4 +1,4 @@
-package ir.xdevelop.electronic_voting.execptions;
+package ir.xdevelop.election_manager.execptions;
 
 public class ResourseNotFoundExeption extends Exception {
 

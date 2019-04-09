@@ -1,6 +1,6 @@
-package ir.xdevelop.electronic_voting.repository;
+package ir.xdevelop.election_manager.repository;
 
-import ir.xdevelop.electronic_voting.model.Election;
+import ir.xdevelop.election_manager.model.Election;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

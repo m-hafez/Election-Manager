@@ -1,4 +1,4 @@
-package ir.xdevelop.electronic_voting.model;
+package ir.xdevelop.election_manager.model;
 
 import com.google.gson.JsonObject;
 import javax.persistence.*;

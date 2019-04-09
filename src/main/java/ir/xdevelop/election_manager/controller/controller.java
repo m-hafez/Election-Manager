@@ -1,8 +1,8 @@
-package ir.xdevelop.electronic_voting.controller;
+package ir.xdevelop.election_manager.controller;
 
 
-import ir.xdevelop.electronic_voting.model.Election;
-import ir.xdevelop.electronic_voting.repository.ElectionRepository;
+import ir.xdevelop.election_manager.model.Election;
+import ir.xdevelop.election_manager.repository.ElectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

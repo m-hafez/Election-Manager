@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ir.xdevelop</groupId>
-    <artifactId>electronic_voting</artifactId>
-    <version>0.0.1</version>
-    <name>Electronic Voting</name>
-    <description>Electronic Voting project</description>
+    <artifactId>election_manager</artifactId>
+    <version>1.0</version>
+    <name>Election Manager</name>
+    <description>Election Manager project</description>
 
     <properties>
         <java.version>11</java.version>
