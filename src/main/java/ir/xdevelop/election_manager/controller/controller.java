@@ -4,10 +4,7 @@ package ir.xdevelop.election_manager.controller;
 import ir.xdevelop.election_manager.model.Election;
 import ir.xdevelop.election_manager.repository.ElectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -18,7 +15,7 @@ public class controller {
     @Autowired
     ElectionRepository repository;
 
-    @RequestMapping(value = "/election/create")
+    @PostMapping(value = "/elections/create")
     public void createElection(@RequestBody Election election, HttpServletResponse response){
         if(repository.existsElectionByTitle(election.getTitle())){
             response.setStatus(HttpServletResponse.SC_CONFLICT);
@@ -27,7 +24,7 @@ public class controller {
         }
     }
 
-    @RequestMapping(value = "/election/edit")
+    @PutMapping(value = "/elections/edit")
     public void EditElection(@RequestBody Election election, HttpServletResponse response){
         if(repository.existsElectionById(election.getId())) {
             Election e = repository.getOne(election.getId());
@@ -38,8 +35,8 @@ public class controller {
         }
     }
 
-    @RequestMapping(value = "/election/remove")
-    public void RemoveElection(@RequestParam int electionId, HttpServletResponse response){
+    @DeleteMapping(value = "/elections/{electionId}/remove")
+    public void RemoveElection(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsElectionById(electionId)){
             repository.delete(repository.getOne(electionId));
         }else {
@@ -47,8 +44,8 @@ public class controller {
         }
     }
 
-    @RequestMapping(value = "/election/incremenet-number-of-votes")
-    public void IncremenetNumberOfVotes(@RequestParam int electionId, HttpServletResponse response){
+    @PutMapping(value = "/elections/{electionId}/votes/incremenet")
+    public void IncremenetNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsElectionById(electionId)){
             Election e = repository.getOne(electionId);
             e.IncremenetNumberOfVotes();
@@ -58,8 +55,8 @@ public class controller {
         }
     }
 
-        @RequestMapping(value = "/election/get-list-of-choices")
-    public List getListOfChoices(@RequestParam int electionId, HttpServletResponse response){
+    @GetMapping(value = "/elections/{electionId}/choices")
+    public List getListOfChoices(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsElectionById(electionId)) {
             return repository.getOne(electionId).getArrayListOfChoices();
         }else {
@@ -68,13 +65,13 @@ public class controller {
         }
     }
 
-    @RequestMapping(value = "/election/get-all")
+    @GetMapping(value = "/elections")
     public List getAllElections(){
         return repository.findAll();
     }
 
-    @RequestMapping(value = "/election/exists")
-    public void electionExists(@RequestParam int electionId, HttpServletResponse response){
+    @GetMapping(value = "/elections/{electionId}/exists")
+    public void electionExists(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsElectionById(electionId)){
             response.setStatus(HttpServletResponse.SC_FOUND);
         }else {
@@ -82,8 +79,8 @@ public class controller {
         }
     }
 
-    @RequestMapping(value = "/election/get-details")
-    public String getElectionDetails(@RequestParam int electionId, HttpServletResponse response){
+    @GetMapping(value = "/elections/{electionId}")
+    public String getElectionDetails(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsElectionById(electionId)) {
             return repository.getOne(electionId).toString();
         }else {
@@ -91,6 +88,6 @@ public class controller {
             return null;
         }
     }
-    
+
 }
 
