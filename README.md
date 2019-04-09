@@ -3,7 +3,7 @@
 
 <p align="center">
     <br><br>
-  <img width="400" height="300" src="https://cdn.xdevelop.ir/img/projects/restful/Electronic_Voting.png">
+  <img width="600" height="500" src="https://cdn.xdevelop.ir/img/projects/restful/Electronic_Voting.png">
     <br><br>
 </p>
 
