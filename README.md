@@ -1,4 +1,4 @@
-# Electronic-Voting
+# Electronic-Voting [![Version 1.0](https://img.shields.io/badge/version-1.0-brightgreen.svg?style=flat&logo=appveyor)](https://github.com/m-hafez/Electronic-Voting/releases/latest) 
 > This is an electronic voting micro-service using series of RESTful APIs which has been developed in Spring Boot Framework. The purpose of this micro-service is to generally provide a management upon electronic voting process. The benefit of this system is to have easy and low-cost way that provides maximum participation and is a way to replace the legacy voing systems in coming days.
 
 ## Usage
