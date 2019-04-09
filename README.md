@@ -4,7 +4,7 @@
 ## Usage
 > The examples usage of mentioned APIs are as following:
 - Create Election
-  - URI: 'http://localhost:8013/election/create'
+  - URI: 'http://localhost:8013/elections/create'
     - body:
     ```
     {
@@ -16,7 +16,7 @@
     }
     ```
 - Edit Election
-  - URI: 'http://localhost:8013/election/edit'
+  - URI: 'http://localhost:8013/elections/edit'
     - body:
     ```
     {
@@ -29,54 +29,34 @@
     }
     ```
 - Remove Election
-  - URI: 'http://localhost:8013/election/remove'
-    - param:
+  - URI: 'http://localhost:8013/elections/{electionId}/remove'
+    - example:
     ```
-    electionId
-    ```
-    usage with GET method
-    ```
-    http://localhost:8013/election/remove?electionId=1
-    ```   
+    http://localhost:8013/elections/1/remove
+    ``` 
 - Incremenet number of votes
-  - URI: 'http://localhost:8013/election/incremenet-number-of-votes'
-    - param:
+  - URI: 'http://localhost:8013/elections/{electionId}/votes/incremenet'
+    - example:
     ```
-    electionId
-    ```
-    usage with GET method
-    ```
-    http://localhost:8013/election/incremenet-number-of-votes?electionId=1
+    http://localhost:8013/elections/1/votes/incremenet
     ```
 - Get list of choices
-  - URI: 'http://localhost:8013/election/get-list-of-choices'
-    - param:
+  - URI: 'http://localhost:8013/elections/{electionId}/choices'
+    - example:
     ```
-    electionId
-    ```
-    usage with GET method
-    ```
-    http://localhost:8013/election/get-list-of-choices?electionId=1
+    http://localhost:8013/elections/1/choices
     ```
 - Get all elections
-  - URI: 'http://localhost:8013/election/get-all'
+  - URI: 'http://localhost:8013/elections'
 - Check election exists
-  - URI: 'http://localhost:8013/election/exists'
-    - param:
+  - URI: 'http://localhost:8013/elections/{electionId}/exists'
+    - example:
     ```
-    electionId
-    ```
-    usage with GET method
-    ```
-    http://localhost:8013/election/exists?electionId=1
+    http://localhost:8013/elections/1/exists
     ```
 - Get election details
-  - URI: 'http://localhost:8013/election/get-details'
-    - param:
+  - URI: 'http://localhost:8013/elections/{electionId}'
+    - example:
     ```
-    electionId
-    ```
-    usage with GET method
-    ```
-    http://localhost:8013/election/get-details?electionId=1
-    ```      
+    http://localhost:8013/elections/1
+    ```  
