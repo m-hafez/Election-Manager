@@ -28,3 +28,55 @@
         "numberOfVotes": "0"
     }
     ```
+- Remove Election
+  - URI: 'http://localhost:8013/election/remove'
+    - param:
+    ```
+    electionId
+    ```
+    usage with GET method
+    ```
+    http://localhost:8013/election/remove?electionId=1
+    ```   
+- Incremenet number of votes
+  - URI: 'http://localhost:8013/election/incremenet-number-of-votes'
+    - param:
+    ```
+    electionId
+    ```
+    usage with GET method
+    ```
+    http://localhost:8013/election/incremenet-number-of-votes?electionId=1
+    ```
+- Get list of choices
+  - URI: 'http://localhost:8013/election/get-list-of-choices'
+    - param:
+    ```
+    electionId
+    ```
+    usage with GET method
+    ```
+    http://localhost:8013/election/get-list-of-choices?electionId=1
+    ```
+- Get all elections
+  - URI: 'http://localhost:8013/election/get-all'
+- Check election exists
+  - URI: 'http://localhost:8013/election/exists'
+    - param:
+    ```
+    electionId
+    ```
+    usage with GET method
+    ```
+    http://localhost:8013/election/exists?electionId=1
+    ```
+- Get election details
+  - URI: 'http://localhost:8013/election/get-details'
+    - param:
+    ```
+    electionId
+    ```
+    usage with GET method
+    ```
+    http://localhost:8013/election/get-details?electionId=1
+    ```      
