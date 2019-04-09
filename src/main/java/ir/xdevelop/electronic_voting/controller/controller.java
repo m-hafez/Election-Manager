@@ -58,5 +58,39 @@ public class controller {
         }
     }
 
+        @RequestMapping(value = "/election/get-list-of-choices")
+    public List getListOfChoices(@RequestParam int electionId, HttpServletResponse response){
+        if(repository.existsElectionById(electionId)) {
+            return repository.getOne(electionId).getArrayListOfChoices();
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/election/get-all")
+    public List getAllElections(){
+        return repository.findAll();
+    }
+
+    @RequestMapping(value = "/election/exists")
+    public void electionExists(@RequestParam int electionId, HttpServletResponse response){
+        if(repository.existsElectionById(electionId)){
+            response.setStatus(HttpServletResponse.SC_FOUND);
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/election/get-details")
+    public String getElectionDetails(@RequestParam int electionId, HttpServletResponse response){
+        if(repository.existsElectionById(electionId)) {
+            return repository.getOne(electionId).toString();
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+    }
+    
 }
 
