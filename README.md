@@ -1,4 +1,4 @@
-# Election Manager [![Version 0.0.1](https://img.shields.io/badge/version-0.0.1-brightgreen.svg?style=flat&logo=appveyor)](https://github.com/m-hafez/Electronic-Voting/releases/latest) 
+# Election Manager [![Version 0.0.1](https://img.shields.io/badge/version-0.0.1-brightgreen.svg?style=flat&logo=s)](https://github.com/m-hafez/Electronic-Voting/releases/latest) ![Java Version 11](https://img.shields.io/badge/Java%20Version-11-blue.svg?style=flat&logo=java)
 > This is an election manager micro-service which can be addressed as heart of "an electronic voting system". This micro-service had been built using series of RESTful APIs which has been developed via Spring Boot Framework. The purpose of this micro-service is to generally provide a management upon electronic voting process. The benefit of this system is to have easy and low-cost way that provides maximum participation and is a way to replace the legacy voing systems in coming days.
 
 <p align="center">
@@ -10,7 +10,7 @@
 ## Usage
 > The examples usage of mentioned APIs are as following:
 - Create Election
-  - URI: 'http://localhost:8013/elections/create'
+  - URI: 'http://localhost:8042/elections/create'
     - body:
     ```
     {
@@ -22,7 +22,7 @@
     }
     ```
 - Edit Election
-  - URI: 'http://localhost:8013/elections/edit'
+  - URI: 'http://localhost:8042/elections/edit'
     - body:
     ```
     {
@@ -35,34 +35,34 @@
     }
     ```
 - Remove Election
-  - URI: 'http://localhost:8013/elections/{electionId}/remove'
+  - URI: 'http://localhost:8042/elections/{electionId}/remove'
     - example:
     ```
-    http://localhost:8013/elections/1/remove
+    http://localhost:8042/elections/1/remove
     ``` 
 - Incremenet number of votes
-  - URI: 'http://localhost:8013/elections/{electionId}/votes/incremenet'
+  - URI: 'http://localhost:8042/elections/{electionId}/votes/incremenet'
     - example:
     ```
-    http://localhost:8013/elections/1/votes/incremenet
+    http://localhost:8042/elections/1/votes/incremenet
     ```
 - Get list of choices
-  - URI: 'http://localhost:8013/elections/{electionId}/choices'
+  - URI: 'http://localhost:8042/elections/{electionId}/choices'
     - example:
     ```
-    http://localhost:8013/elections/1/choices
+    http://localhost:8042/elections/1/choices
     ```
 - Get all elections
-  - URI: 'http://localhost:8013/elections'
+  - URI: 'http://localhost:8042/elections'
 - Check election exists
-  - URI: 'http://localhost:8013/elections/{electionId}/exists'
+  - URI: 'http://localhost:8042/elections/{electionId}/exists'
     - example:
     ```
-    http://localhost:8013/elections/1/exists
+    http://localhost:8042/elections/1/exists
     ```
 - Get election details
-  - URI: 'http://localhost:8013/elections/{electionId}'
+  - URI: 'http://localhost:8042/elections/{electionId}'
     - example:
     ```
-    http://localhost:8013/elections/1
-    ```  
+    http://localhost:8042/elections/1
+    ```
