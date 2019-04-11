@@ -1,6 +1,6 @@
 package ir.xdevelop.election_manager.controller;
 
-
+import com.google.gson.JsonObject;
 import ir.xdevelop.election_manager.model.Election;
 import ir.xdevelop.election_manager.repository.ElectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,5 +89,17 @@ public class controller {
         }
     }
 
-}
+    @GetMapping(value = "/elections/{electionId}/votes")
+    public String getNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
+        if(repository.existsElectionById(electionId)){
+            Election e = repository.getOne(electionId);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("numberOfVotes",e.getNumberOfVotes());
+            return jsonObject.toString();
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+    }
 
+}
