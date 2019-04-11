@@ -38,14 +38,19 @@ public class controller {
     @DeleteMapping(value = "/elections/{electionId}/remove")
     public void RemoveElection(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsElectionById(electionId)){
-            repository.delete(repository.getOne(electionId));
+            Election election = repository.getOne(electionId);
+            if(election.started()) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            }else {
+                repository.delete(election);
+            }
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
-    @PutMapping(value = "/elections/{electionId}/votes/incremenet")
-    public void IncremenetNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
+    @PutMapping(value = "/elections/{electionId}/votes/increment")
+    public void IncrementNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsElectionById(electionId)){
             Election e = repository.getOne(electionId);
             e.IncremenetNumberOfVotes();
@@ -58,7 +63,7 @@ public class controller {
     @GetMapping(value = "/elections/{electionId}/choices")
     public List getListOfChoices(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsElectionById(electionId)) {
-            return repository.getOne(electionId).getArrayListOfChoices();
+            return repository.getOne(electionId).getListOfChoices();
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;

@@ -2,7 +2,11 @@ package ir.xdevelop.election_manager.model;
 
 import com.google.gson.JsonObject;
 import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -69,9 +73,9 @@ public class Election {
         this.endTime = endTime;
     }
 
-    public String getListOfChoices() {
-        return listOfChoices;
-    }
+//    public String getListOfChoices() {
+//        return listOfChoices;
+//    }
 
     public void setListOfChoices(String listOfChoices) {
         this.listOfChoices = listOfChoices;
@@ -89,7 +93,7 @@ public class Election {
         this.title = e.getTitle();
         this.startTime = e.getStartTime();
         this.endTime = e.getEndTime();
-        this.listOfChoices = e.getListOfChoices();
+        this.listOfChoices =e.getListOfChoices().toString(); //e.getListOfChoices();
         this.numberOfVotes = e.getNumberOfVotes();
     }
 
@@ -104,16 +108,34 @@ public class Election {
         electionObject.addProperty("title",this.title);
         electionObject.addProperty("startTime",this.startTime);
         electionObject.addProperty("endTime",this.endTime);
-        electionObject.addProperty("listOfChoices",this.listOfChoices);
+        electionObject.addProperty("listOfChoices",this.getListOfChoices().toString());
         electionObject.addProperty("numberOfVotes",this.numberOfVotes);
         return electionObject.toString();
     }
 
-    public List getArrayListOfChoices(){
+    public List getListOfChoices(){
         List<String> list =new ArrayList<>();
         for (String str : this.listOfChoices.split(",")) {
             list.add(str);
         }
         return list;
     }
+
+    public boolean started(){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        cal.setLenient(false);
+        Date date = null;
+        try {
+            date = dateFormat.parse(this.startTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if(cal.getTime().before(date)){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
 }
