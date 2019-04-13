@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
-public class controller {
+public class Controller {
 
     @Autowired
     ElectionRepository repository;
 
-    @PostMapping(value = "/elections/create")
+    @PostMapping(value = "/elections")
     public void createElection(@RequestBody Election election, HttpServletResponse response){
         if(repository.existsElectionByTitle(election.getTitle())){
             response.setStatus(HttpServletResponse.SC_CONFLICT);
@@ -24,9 +25,9 @@ public class controller {
         }
     }
 
-    @PutMapping(value = "/elections/edit")
+    @PutMapping(value = "/elections/{electionId}")
     public void EditElection(@RequestBody Election election, HttpServletResponse response){
-        if(repository.existsElectionById(election.getId())) {
+        if(repository.existsById(election.getId())) {
             Election e = repository.getOne(election.getId());
             e.getDataFrom(election);
             repository.save(e);
@@ -35,9 +36,9 @@ public class controller {
         }
     }
 
-    @DeleteMapping(value = "/elections/{electionId}/remove")
+    @DeleteMapping(value = "/elections/{electionId}")
     public void RemoveElection(@PathVariable int electionId, HttpServletResponse response){
-        if(repository.existsElectionById(electionId)){
+        if(repository.existsById(electionId)){
             Election election = repository.getOne(electionId);
             if(election.started()) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -51,7 +52,7 @@ public class controller {
 
     @PutMapping(value = "/elections/{electionId}/votes/increment")
     public void IncrementNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
-        if(repository.existsElectionById(electionId)){
+        if(repository.existsById(electionId)){
             Election e = repository.getOne(electionId);
             e.IncremenetNumberOfVotes();
             repository.save(e);
@@ -62,7 +63,7 @@ public class controller {
 
     @GetMapping(value = "/elections/{electionId}/choices")
     public List getListOfChoices(@PathVariable int electionId, HttpServletResponse response){
-        if(repository.existsElectionById(electionId)) {
+        if(repository.existsById(electionId)) {
             return repository.getOne(electionId).getListOfChoices();
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -72,12 +73,12 @@ public class controller {
 
     @GetMapping(value = "/elections")
     public List getAllElections(){
-        return repository.findAll();
+        return repository.findAllByOrderByIdAsc();
     }
 
     @GetMapping(value = "/elections/{electionId}/exists")
     public void electionExists(@PathVariable int electionId, HttpServletResponse response){
-        if(repository.existsElectionById(electionId)){
+        if(repository.existsById(electionId)){
             response.setStatus(HttpServletResponse.SC_FOUND);
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -86,7 +87,7 @@ public class controller {
 
     @GetMapping(value = "/elections/{electionId}")
     public String getElectionDetails(@PathVariable int electionId, HttpServletResponse response){
-        if(repository.existsElectionById(electionId)) {
+        if(repository.existsById(electionId)) {
             return repository.getOne(electionId).toString();
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -96,7 +97,7 @@ public class controller {
 
     @GetMapping(value = "/elections/{electionId}/votes")
     public String getNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
-        if(repository.existsElectionById(electionId)){
+        if(repository.existsById(electionId)){
             Election e = repository.getOne(electionId);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("numberOfVotes",e.getNumberOfVotes());
