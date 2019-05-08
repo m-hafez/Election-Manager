@@ -1,5 +1,5 @@
 # Election Manager [![Version 1.0](https://img.shields.io/badge/version-1.0-brightgreen.svg?style=flat)](https://github.com/m-hafez/Electronic-Voting/releases/latest) ![Java Version 11](https://img.shields.io/badge/Java%20Version-11-blue.svg?style=flat&logo=java)
-> This is an election manager micro-service which can be addressed as heart of "an electronic voting system". This micro-service had been built using series of RESTful APIs which has been developed via Spring Boot Framework. The purpose of this micro-service is to generally provide a management upon electronic voting process. The benefit of this system is to have easy and low-cost way that provides maximum participation and is a way to replace the legacy voting systems in coming days.
+> This is an election manager micro-service which can be addressed as heart of "an electronic voting system". This micro-service had been built using series of RESTful APIs which has been developed via Spring Boot Framework. The purpose of this micro-service is to generally provide a management upon electronic voting process. The benefit of this system is to have easy and low-cost way that provides maximum participation and is a way to replace the Traditional voting systems in coming days.
 
 <p align="center">
     <br><br>
