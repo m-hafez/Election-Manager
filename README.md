@@ -3,7 +3,7 @@
 
 <p align="center">
     <br><br>
-  <img width="600" height="500" src="https://raw.githubusercontent.com/m-hafez/Election-Manager/master/ElectronicVoting.png">
+  <img width="600" height="500" src="https://user-images.githubusercontent.com/29079706/57645825-5f115a00-75d4-11e9-9934-e85ebf34ec83.png">
     <br><br>
 </p>
 
