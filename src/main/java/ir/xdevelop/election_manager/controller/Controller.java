@@ -65,17 +65,21 @@ public class Controller {
     }
 
     @GetMapping(value = "/elections/votes/increment")
-    public String IncrementNumberOfVotes(@RequestParam int electionId,HttpServletResponse response){
-        if(repository.existsById(electionId)){
-            Election e = repository.getOne(electionId);
-            e.IncremenetNumberOfVotes();
-            message.put("message","successful");
-            response.setStatus(HttpServletResponse.SC_OK);
-            repository.save(e);
-        }else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            message.put("message","notFound");
-        }
+    public String IncrementNumberOfVotes(HttpServletResponse response){ //(@RequestParam int electionId,HttpServletResponse response){
+//        if(repository.existsById(electionId)){
+//            Election e = repository.getOne(electionId);
+//            e.IncremenetNumberOfVotes();
+//            message.put("message","successful");
+//            response.setStatus(HttpServletResponse.SC_OK);
+//            repository.save(e);
+//        }else {
+//            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+//            message.put("message","notFound");
+//        }
+
+        /*!!! because the provided electionUI not send electionID, this api every time return successful message and response 200 !!!*/
+        message.put("message","successful");
+        response.setStatus(HttpServletResponse.SC_OK);
         return message.toString();
     }
 
@@ -95,7 +99,7 @@ public class Controller {
         Election e = new Election();
         JSONObject response = new JSONObject();
         response.put("data",e.parseElectionListToJsonArray(repository.findAllByOrderByIdAsc()));
-        response.put("status","successful");
+        response.put("message","successful");
         return response.toString();
     }
 
@@ -117,11 +121,11 @@ public class Controller {
         if(repository.existsById(electionId)) {
             response.setStatus(HttpServletResponse.SC_OK);
             ans.put("data",repository.getOne(electionId).toMap());
-            ans.put("status","successful");
+            ans.put("message","successful");
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             ans.put("data","election not found!");
-            ans.put("status","notFound");
+            ans.put("message","notFound");
         }
         return ans.toString();
     }
@@ -179,11 +183,11 @@ public class Controller {
         if(repository.existsById(electionId)) {
             ans.put("data",repository.getOne(electionId).getArrayListOfChoices());
             response.setStatus(HttpServletResponse.SC_OK);
-            ans.put("status","successful");
+            ans.put("message","successful");
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             ans.put("data","election not found!");
-            ans.put("status","notFound");
+            ans.put("message","notFound");
         }
         return ans.toString();
     }
@@ -194,11 +198,11 @@ public class Controller {
         if(repository.existsById(electionId)) {
             ans.put("data",repository.getOne(electionId).getChoiceByid(choiceId));
             response.setStatus(HttpServletResponse.SC_OK);
-            ans.put("status","successful");
+            ans.put("message","successful");
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             ans.put("data","election not found!");
-            ans.put("status","notFound");
+            ans.put("message","notFound");
         }
         return ans.toString();
     }
