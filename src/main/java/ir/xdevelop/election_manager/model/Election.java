@@ -1,7 +1,8 @@
 package ir.xdevelop.election_manager.model;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,7 +15,7 @@ public class Election {
     private int id;
 
     @Column
-    private String title;
+    private String name;
 
     @Column
     private Date startTime;
@@ -22,16 +23,16 @@ public class Election {
     @Column
     private Date endTime;
 
-    @Column
-    private String listOfChoices;
+    @ElementCollection
+    private Map<Integer,String> listOfChoices=new LinkedHashMap<>();
 
     @Column
     private int numberOfVotes;
 
     public Election() { }
 
-    public Election(String title, Date startTime, Date endTime, String listOfChoices, int numberOfVotes) {
-        this.title = title;
+    public Election(String name, Date startTime, Date endTime, Map<Integer,String> listOfChoices, int numberOfVotes) {
+        this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.listOfChoices = listOfChoices;
@@ -46,12 +47,12 @@ public class Election {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getname() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setname(String name) {
+        this.name = name;
     }
 
     public Date getStartTime() {
@@ -70,11 +71,11 @@ public class Election {
         this.endTime = endTime;
     }
 
-//    public String getListOfChoices() {
-//        return listOfChoices;
-//    }
+    public Map<Integer,String> getListOfChoices() {
+        return listOfChoices;
+    }
 
-    public void setListOfChoices(String listOfChoices) {
+    public void setListOfChoices(Map<Integer,String> listOfChoices) {
         this.listOfChoices = listOfChoices;
     }
 
@@ -87,10 +88,10 @@ public class Election {
     }
 
     public void getDataFrom(Election e){
-        this.title = e.getTitle();
+        this.name = e.getname();
         this.startTime = e.getStartTime();
         this.endTime = e.getEndTime();
-        this.listOfChoices = e.getListOfChoices().toString(); //e.getListOfChoices();
+        this.listOfChoices = e.getListOfChoices();
         this.numberOfVotes = e.getNumberOfVotes();
     }
 
@@ -100,28 +101,50 @@ public class Election {
 
     @Override
     public String toString() {
-        JsonObject electionObject = new JsonObject();
-        electionObject.addProperty("id",this.id);
-        electionObject.addProperty("title",this.title);
-        electionObject.addProperty("startTime",this.startTime.toString());
-        electionObject.addProperty("endTime",this.endTime.toString());
-        electionObject.add("listOfChoices", this.parseListToJsonArray(this.getListOfChoices()));
-        electionObject.addProperty("numberOfVotes",this.numberOfVotes);
+        JSONObject electionObject = new JSONObject();
+        electionObject.put("id",this.id);
+        electionObject.put("name",this.name);
+        electionObject.put("startTime",this.startTime.toString());
+        electionObject.put("endTime",this.endTime.toString());
+        electionObject.put("listOfChoices", this.getListOfChoices().toString());
+        electionObject.put("numberOfVotes",this.numberOfVotes);
         return electionObject.toString();
     }
 
-    private JsonArray parseListToJsonArray(List<String> list){
-        JsonArray jsonElements = new JsonArray();
-        for (String str:list){
-            jsonElements.add(str);
+    public Map toMap() {
+        Map m = new LinkedHashMap(4);
+        m.put("id", this.id);
+        m.put("name", this.name);
+        m.put("startTime", this.startTime.toString());
+        m.put("endTime", this.endTime.toString());
+        return m;
+    }
+
+    public JSONArray getArrayListOfChoices() {
+        JSONArray loch = new JSONArray();
+        for (Integer i:listOfChoices.keySet()) {
+            JSONObject jobj = new JSONObject();
+            jobj.put("id",i);
+            jobj.put("choice",listOfChoices.get(i));
+            loch.put(jobj);
+        }
+        return loch;
+    }
+
+    public JSONArray parseElectionListToJsonArray(List<Election> list){
+        JSONArray jsonElements = new JSONArray();
+        for (Election e:list){
+            jsonElements.put(e.toMap());
         }
         return jsonElements;
     }
 
-    public List<String> getListOfChoices(){
-        List<String> list =new ArrayList<>();
-        Collections.addAll(list, this.listOfChoices.split(","));
-        return list;
+
+    public JSONObject getChoiceByid(int id) {
+        JSONObject jobj = new JSONObject();
+        jobj.put("id",id);
+        jobj.put("choice",listOfChoices.get(id));
+        return jobj;
     }
 
     public boolean started(){

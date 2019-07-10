@@ -6,10 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ElectionRepository extends JpaRepository<Election,Integer> {
+public interface ElectionRepository extends JpaRepository<Election,Integer>  {
 
-    @Query("SELECT CASE WHEN COUNT(e) > 0 THEN 'true' ELSE 'false' END FROM Election e WHERE e.title = ?1")
-    boolean existsElectionByTitle(String title);
+    @Query("SELECT CASE WHEN COUNT(e) > 0 THEN 'true' ELSE 'false' END FROM Election e WHERE e.name = ?1")
+    boolean existsElectionByname(String name);
+
+//    @Query("SELECT size(e.listOfChoices) FROM Election e")
+//    int rowConstructor();
 
     List<Election> findAllByOrderByIdAsc();
+
 }

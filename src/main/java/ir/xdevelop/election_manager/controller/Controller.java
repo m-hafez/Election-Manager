@@ -1,111 +1,224 @@
 package ir.xdevelop.election_manager.controller;
 
-import com.google.gson.JsonObject;
 import ir.xdevelop.election_manager.model.Election;
 import ir.xdevelop.election_manager.repository.ElectionRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
-@CrossOrigin("http://localhost:4200")
+
 @RestController
 public class Controller {
+
+    JSONObject message = new JSONObject();
 
     @Autowired
     ElectionRepository repository;
 
-    @PostMapping(value = "/elections")
-    public void createElection(@RequestBody Election election, HttpServletResponse response){
-        if(repository.existsElectionByTitle(election.getTitle())){
+    @PostMapping(value = "/elections/save")
+    public String createElection(@RequestBody Election election, HttpServletResponse response){
+        if(repository.existsElectionByname(election.getname())){
             response.setStatus(HttpServletResponse.SC_CONFLICT);
+            message.put("message","exist");
         }else {
             repository.save(election);
+            message.put("message","successful");
+            response.setStatus(HttpServletResponse.SC_OK);
         }
+        return message.toString();
     }
 
-    @PutMapping(value = "/elections/{electionId}")
-    public void EditElection(@RequestBody Election election, HttpServletResponse response){
+    @PutMapping(value = "/elections/update")
+    public String EditElection(@RequestBody Election election, HttpServletResponse response){
         if(repository.existsById(election.getId())) {
             Election e = repository.getOne(election.getId());
             e.getDataFrom(election);
             repository.save(e);
+            message.put("message","successful");
+            response.setStatus(HttpServletResponse.SC_OK);
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message.put("message","notFound");
         }
+        return message.toString();
     }
 
-    @DeleteMapping(value = "/elections/{electionId}")
-    public void RemoveElection(@PathVariable int electionId, HttpServletResponse response){
+    @GetMapping(value = "/elections/{electionId}/remove")
+    public String RemoveElection(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsById(electionId)){
             Election election = repository.getOne(electionId);
             if(election.started()) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                message.put("message","forbidden, Election is started.");
             }else {
                 repository.delete(election);
+                message.put("message","successful");
+                response.setStatus(HttpServletResponse.SC_OK);
             }
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message.put("message","notFound");
         }
+        return message.toString();
     }
 
-    @PutMapping(value = "/elections/{electionId}/votes/increment")
-    public void IncrementNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
+    @GetMapping(value = "/elections/votes/increment")
+    public String IncrementNumberOfVotes(@RequestParam int electionId,HttpServletResponse response){
         if(repository.existsById(electionId)){
             Election e = repository.getOne(electionId);
             e.IncremenetNumberOfVotes();
+            message.put("message","successful");
+            response.setStatus(HttpServletResponse.SC_OK);
             repository.save(e);
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message.put("message","notFound");
         }
+        return message.toString();
     }
 
     @GetMapping(value = "/elections/{electionId}/choices")
-    public List getListOfChoices(@PathVariable int electionId, HttpServletResponse response){
+    public String getListOfChoices(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsById(electionId)) {
-            return repository.getOne(electionId).getListOfChoices();
+            response.setStatus(HttpServletResponse.SC_OK);
+            return repository.getOne(electionId).getListOfChoices().toString();
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
     }
 
-    @GetMapping(value = "/elections")
-    public List getAllElections(){
-        return repository.findAllByOrderByIdAsc();
+    @GetMapping(value = "/elections/all")
+    public String getAllElections(){
+        Election e = new Election();
+        JSONObject response = new JSONObject();
+        response.put("data",e.parseElectionListToJsonArray(repository.findAllByOrderByIdAsc()));
+        response.put("status","successful");
+        return response.toString();
     }
 
-    @GetMapping(value = "/elections/{electionId}/exists")
-    public void electionExists(@PathVariable int electionId, HttpServletResponse response){
+    @GetMapping(value = "/elections/exists")
+    public String electionExists(@RequestParam int electionId, HttpServletResponse response){
         if(repository.existsById(electionId)){
-            response.setStatus(HttpServletResponse.SC_FOUND);
+            response.setStatus(HttpServletResponse.SC_OK);
+            message.put("message","successful");
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message.put("message","notFound");
         }
+        return message.toString();
     }
 
-    @GetMapping(value = "/elections/{electionId}")
+    @GetMapping(value = "/elections/{electionId}/get")
     public String getElectionDetails(@PathVariable int electionId, HttpServletResponse response){
+        JSONObject ans = new JSONObject();
         if(repository.existsById(electionId)) {
-            return repository.getOne(electionId).toString();
+            response.setStatus(HttpServletResponse.SC_OK);
+            ans.put("data",repository.getOne(electionId).toMap());
+            ans.put("status","successful");
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return null;
+            ans.put("data","election not found!");
+            ans.put("status","notFound");
         }
+        return ans.toString();
+    }
+
+    @PostMapping(value = "elections/{electionId}/choices/save")
+    public String createAchoiceForAnElection(@PathVariable int electionId,@RequestBody String rb, HttpServletResponse response){
+        if(repository.existsById(electionId)){
+            JSONObject jsonObject = new JSONObject(rb);
+            Election e = repository.getOne(electionId);
+            e.getListOfChoices().put(e.getListOfChoices().size()+1,jsonObject.get("choice").toString()); //repository.rowConstructor()+1
+            repository.save(e);
+            response.setStatus(HttpServletResponse.SC_OK);
+            message.put("message","successful");
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message.put("message","notFound");
+        }
+        return message.toString();
+    }
+
+    @PutMapping(value = "/elections/{electionId}/choices/{choiceId}/update")
+    public String editingAchoiceOfAnElection(@PathVariable int electionId,@PathVariable int choiceId,@RequestBody String rb, HttpServletResponse response){
+        if(repository.existsById(electionId)){
+            JSONObject jsonObject = new JSONObject(rb);
+            Election e = repository.getOne(electionId);
+            e.getListOfChoices().replace(choiceId,jsonObject.get("choice").toString());
+            repository.save(e);
+            response.setStatus(HttpServletResponse.SC_OK);
+            message.put("message","successful");
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message.put("message","notFound");
+        }
+        return message.toString();
+    }
+
+    @GetMapping(value = "/elections/{electionId}/choices/{choiceId}/remove")
+    public String removingAchoiceFromAnElection(@PathVariable int electionId,@PathVariable int choiceId, HttpServletResponse response){
+        if(repository.existsById(electionId)){
+            Election e = repository.getOne(electionId);
+            e.getListOfChoices().remove(choiceId);
+            repository.save(e);
+            response.setStatus(HttpServletResponse.SC_OK);
+            message.put("message","successful");
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message.put("message","notFound");
+        }
+        return message.toString();
+    }
+
+    @GetMapping(value = "/elections/{electionId}/choices/all")
+    public String getElectionChoices(@PathVariable int electionId, HttpServletResponse response){
+        JSONObject ans = new JSONObject();
+        if(repository.existsById(electionId)) {
+            ans.put("data",repository.getOne(electionId).getArrayListOfChoices());
+            response.setStatus(HttpServletResponse.SC_OK);
+            ans.put("status","successful");
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            ans.put("data","election not found!");
+            ans.put("status","notFound");
+        }
+        return ans.toString();
+    }
+
+    @GetMapping(value = "/elections/{electionId}/choices/{choiceId}/get")
+    public String getElectionOneChoices(@PathVariable int electionId,@PathVariable int choiceId, HttpServletResponse response){
+        JSONObject ans = new JSONObject();
+        if(repository.existsById(electionId)) {
+            ans.put("data",repository.getOne(electionId).getChoiceByid(choiceId));
+            response.setStatus(HttpServletResponse.SC_OK);
+            ans.put("status","successful");
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            ans.put("data","election not found!");
+            ans.put("status","notFound");
+        }
+        return ans.toString();
     }
 
     @GetMapping(value = "/elections/{electionId}/votes")
     public String getNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
         if(repository.existsById(electionId)){
             Election e = repository.getOne(electionId);
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("numberOfVotes",e.getNumberOfVotes());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("numberOfVotes",e.getNumberOfVotes());
             return jsonObject.toString();
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
+    }
+
+    @GetMapping(value = "/heartbeat")
+    public void heartbeat(HttpServletResponse response){
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
 }
