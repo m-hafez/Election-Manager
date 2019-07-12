@@ -14,6 +14,7 @@
 - Fix URIs
 > Version 2.0 released(Jul 11, 2019). 
 - <b>Fully FUM-Election compatible</b>
+- <b>Dockerized</b> :whale:
 - Elections choices storing improved
 ## Usage
 > The examples usage of mentioned APIs are as following:
