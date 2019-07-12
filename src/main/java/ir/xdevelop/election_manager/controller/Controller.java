@@ -77,9 +77,24 @@ public class Controller {
 //            message.put("message","notFound");
 //        }
 
-        /*!!! because the provided electionUI not send electionID, this api every time return successful message and response 200 !!!*/
+        /*!!! because the provided electionPortal not send electionID, this api every time return successful message and response 200 !!!*/
         message.put("message","successful");
         response.setStatus(HttpServletResponse.SC_OK);
+        return message.toString();
+    }
+
+    @PutMapping(value = "/elections/{electionId}/votes/increment")
+    public String IncrementNumberOfVotes_correct(@PathVariable int electionId,HttpServletResponse response){
+        if(repository.existsById(electionId)){
+            Election e = repository.getOne(electionId);
+            e.IncremenetNumberOfVotes();
+            message.put("message","successful");
+            response.setStatus(HttpServletResponse.SC_OK);
+            repository.save(e);
+        }else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            message.put("message","notFound");
+        }
         return message.toString();
     }
 
@@ -209,15 +224,20 @@ public class Controller {
 
     @GetMapping(value = "/elections/{electionId}/votes")
     public String getNumberOfVotes(@PathVariable int electionId, HttpServletResponse response){
+        JSONObject ans = new JSONObject();
         if(repository.existsById(electionId)){
             Election e = repository.getOne(electionId);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("numberOfVotes",e.getNumberOfVotes());
-            return jsonObject.toString();
+            ans.put("data",jsonObject);
+            ans.put("message","successful");
+            response.setStatus(HttpServletResponse.SC_OK);
         }else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return null;
+            ans.put("data","election not found!");
+            ans.put("message","notFound");
         }
+        return ans.toString();
     }
 
     @GetMapping(value = "/heartbeat")

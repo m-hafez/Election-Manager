@@ -10,7 +10,7 @@
     </parent>
     <groupId>ir.xdevelop</groupId>
     <artifactId>electionmanager</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
     <name>electionmanager</name>
     <description>Election Manager project</description>
 
