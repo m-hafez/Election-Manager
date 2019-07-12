@@ -64,7 +64,7 @@
         ```
 - <b>Increment total vote number for an election</b>
   - URI: '[/elections/votes/increment]()'
-    - :warning: because the provided electionPortal not send electionID, this api every time return successful message and response 200 and not incrementing total vote number for an election but <u>compatible</u> with <b>FUM-Election</b>:exclamation:
+    - :warning: because the provided electionPortal not send electionID,this api every time return successful message and response 200 and not incrementing total vote number for an election but <u>compatible</u> with <b>FUM-Election</b>:exclamation:
     - Method: GET
     - Response <b>```200 OK```</b>
         ```
